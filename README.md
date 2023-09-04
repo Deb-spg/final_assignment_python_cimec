@@ -1,5 +1,9 @@
 ## Final assignment for Python course at CIMeC.
 
+My idea for the final assignment consists of generating a Python script that automatize the scoring process 
+of a neuropsychological test I am administering for my PhD project.
+
+
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Brief description of my project:
