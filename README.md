@@ -34,19 +34,3 @@ The summary index score represents the overall impact of Parkinson's disease on 
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-# Script for automatically perform the scoring of The Parkinson's Disease Questionnaire (PDQ-39)
-## Table of Contents
-
-The code has two sections: the first for PDQ-39 scores obtained before DBS, the second for PDQ-39 scores obtained after DBS.
-|| N.B. Since I don't have sufficient data to perform statistics on it, my code is now limited only in displaying and plotting patients' scores.
-
-The two sections share the same structure and operations as described below:
-
-1) The .csv file that store raw data of PDQ-39 is logged and converted into a dataframe using pandas library.
-2) An empty dictionary is then created to associate domain-specific scale (keys) to the corresponding items in the questionnaire (values).
-3) A new dataframe is then created to match patients' answers with the respective scales.
-4) A function calculate_domain_score performs calculation of specific scores for each domain and then applied to our data.
-5) A new column "Total_score" is then added where the summary index score is calculated for each patient (row)
-   by summing up each domain score and then divide the result by 8 (total number of scales in PDQ-39).
-
-PLOTTING:
