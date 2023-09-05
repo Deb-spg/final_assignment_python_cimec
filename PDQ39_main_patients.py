@@ -17,7 +17,6 @@
 
 # In[ ]:
 
-
 ### Log csv files with patients' PDQ-39 scores PRE-DBS   ###
 
 import pandas as pd
@@ -26,12 +25,12 @@ import logging
 logging.basicConfig(filename='logfile.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Specify the path to your CSV file
-csv_file_path = r'C:\Users\debora.spagnolo\Desktop\Deb_PhD\PD_DBS\patients_PRE_PDQ39_rawscores.csv'
+csv_file_path = r'patients_PRE_PDQ39_rawscores.csv'
 
 # Log the CSV file
-
+# LP: You nicely define the variable to specify path above but then you don't use it here!
 try:
-    patients_pre_df = pd.read_csv(r'C:\Users\debora.spagnolo\Desktop\Deb_PhD\PD_DBS\patients_PRE_PDQ39_rawscores.csv')
+    patients_pre_df = pd.read_csv(csv_file_path)
     logging.info(f'CSV file was successfully logged.')
 except FileNotFoundError:
     logging.error(f'CSV file not found.')
@@ -42,12 +41,16 @@ except Exception as e:
 patients_pre_df
 
 
+
+
 # In[ ]:
 
 
 # Create an empty dictionary to store patient scores in PDQ-39 specific scales
 patient_pre_scores_by_scale = {}
 
+# LP: I know you make the dataset redable in the next line, and  you do not have a say in how this dataframe is organized,
+# but I would definitively try to improve data at the source!
 # Define the item ranges for each scale
 pdq_scales = {
     'Mobility': range(0, 10),             # Items 0 to 9
@@ -62,7 +65,7 @@ pdq_scales = {
 
 # Loop through each patient's scores and organize them into scales
 for patient_name in patients_pre_df.columns:
-    patient_scores = patients_pre_df.loc[0:38, patient_name].tolist()  # PDQ-39 has 39 items
+    patient_scores = patients_pre_df.loc[0:38, patient_name].tolist()  # PDQ-39 has 39 items  # LP: just `[:, patient_name]` would be enough
     patient_scale_scores = {}
     
     for scale, item_range in pdq_scales.items():
@@ -87,7 +90,8 @@ patient_pre_scores_by_scale_df
 # then we divide this number by the maximum score for each question (4)
 # then we divide this number by the total number of questions (items) for each domain (scale)
 # then we multiply this last result for 100
-
+# LP: Maybe you can add at least max score as a variable:
+max_score = 4 # etc
 
 def calculate_domain_score(questions):
     # Sum the scores for the questions within the domain
@@ -112,6 +116,7 @@ def calculate_domain_score(questions):
 patients_pre_dbs_scores = patient_pre_scores_by_scale_df.apply(lambda row: row.apply(calculate_domain_score), axis=1)
 
 # Calculate the total score for each patient
+# LP: Where is the 8 from? I would add a comment here
 patients_pre_dbs_scores['Total_score'] = patients_pre_dbs_scores.sum(axis=1) / 8
 
 # Round the total scores
@@ -152,6 +157,7 @@ plt.title('Total Scores PRE-DBS for Each Patient')
 plt.xticks(range(len(patient_ids)), x_labels, rotation=45)
 
 # Add annotations to display scores on top of each bar
+# LP: Neat! Did not know about the annotate function :)
 for i, score in enumerate(total_scores_pre):
     plt.annotate(str(score), xy=(i, score), ha='center', va='bottom')
 
@@ -211,6 +217,15 @@ for domain in domain_names:
 
 
 ### Log csv files with patients' PDQ-39 scores POST-DBS   ###
+
+# LP: Ok, so this is a major issue with this code that is very important you try to avoid in the future
+# There are huge portions of the code below that are exactly the same as the code above.
+# This is a problem because if you need to change something in the code, you need to change it in two places, and
+# this is a recipe for disaster! If you need to change something, you need to change it in one place only!!
+# I would strongly encourage you (exp if you will actually need this code in the future) to organize your code in such
+# a way that you can reuse the same code multiple times without having to copy and paste it.
+
+# This could inlcude either writing loops over files (pre,post); or writing functions that you can call multiple times
 
 
 import pandas as pd
